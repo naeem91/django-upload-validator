@@ -10,7 +10,7 @@ from django.utils.deconstruct import deconstructible
 from django.core.exceptions import ValidationError
 
 # max bytes to read for file type detection
-READ_SIZE = 1 * (1024 * 1024)   # 1MB
+READ_SIZE = 5 * (1024 * 1024)   # 5MB
 
 
 @deconstructible

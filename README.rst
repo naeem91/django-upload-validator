@@ -35,6 +35,6 @@ Usage as a FileField validator in Django forms
 
 Running Tests
 #############
-Run `python runtests.py` inside the root directory of package
+Run :code:`python runtests.py` inside the root directory of package
 
 
