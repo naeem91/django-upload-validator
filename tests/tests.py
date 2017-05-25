@@ -1,4 +1,5 @@
 import os
+from ddt import ddt, data
 
 from django.test import TestCase
 
@@ -8,6 +9,7 @@ from upload_validator import FileTypeValidator
 TEST_FILES_DIR = os.path.join(os.path.dirname(__file__), 'test_files')
 
 
+@ddt
 class TestFileValidator(TestCase):
     def test_initialization(self):
         """
@@ -19,7 +21,9 @@ class TestFileValidator(TestCase):
 
         self.assertTrue(isinstance(validator, FileTypeValidator))
 
-    def test_valid_types(self):
+    @data('sample.doc', 'sample.pdf', 'sample.docx', 'sample.pptx', 'sample.ppt',
+          'sample.tif', 'sample.jpeg', 'sample.png')
+    def test_valid_types(self, filename):
         """
         Tests that different files are detected correctly
         """
@@ -34,19 +38,11 @@ class TestFileValidator(TestCase):
             ]
         )
 
-        test_files = [
-            'sample.doc', 'sample.pdf', 'sample.docx', 'sample.pptx', 'sample.ppt',
-            'sample.tif', 'sample.jpeg', 'sample.png'
-        ]
+        file_path = os.path.join(TEST_FILES_DIR, filename)
 
-        for dir, dirname, files in os.walk(TEST_FILES_DIR):
-            for filename in files:
-                if filename in test_files:
-                    file_path = os.path.join(TEST_FILES_DIR, filename)
-
-                    file_obj = open(file_path)
-                    validator(file_obj)
-                    file_obj.close()
+        file_obj = open(file_path)
+        validator(file_obj)
+        file_obj.close()
 
     def test_invalid_content(self):
         """

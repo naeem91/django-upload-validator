@@ -10,6 +10,7 @@ General usage
 ::
 
     from upload_validator import FileTypeValidator
+
     validator = FileTypeValidator(
         allowed_types=['application/msword'],
         allowed_extensions=['.doc', '.docx']
@@ -35,6 +36,5 @@ Usage as a FileField validator in Django forms
 
 Running Tests
 #############
-Run :code:`python runtests.py` inside the root directory of package
-
-
+#. Install testing requirements :code:`pip install -r tests/requirements.txt`
+#. Run :code:`python runtests.py` inside the root directory of package
