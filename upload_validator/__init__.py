@@ -45,11 +45,10 @@ class FileTypeValidator(object):
         # later without resetting the position
         fileobj.seek(0)
 
-        # magic returns 'application/octet-stream' for .doc files
-        # use detection details to determine if it's a doc word file
+        # magic returns 'application/octet-stream' for .doc and .xls files
+        # use detection details to transform it to proper mime
         if detected_type == 'application/octet-stream':
-            if self._is_ms_word(fileobj):
-                detected_type = 'application/msword'
+            detected_type = self.check_word_or_excel(fileobj)
 
         if detected_type not in self.allowed_mimes:
             # use more readable file type names for feedback message
@@ -74,13 +73,22 @@ class FileTypeValidator(object):
                 code='invalid_extension'
             )
 
-    def _is_ms_word(self, fileobj):
+    def check_word_or_excel(self, fileobj):
         """
-        Determines if a file is a MS Word file using extracted description
+        Returns proper mimetype in case of word or excel files
         """
         word_strings = ['Microsoft Word', 'Microsoft Office Word', 'Microsoft Macintosh Word']
+        excel_strings = ['Microsoft Excel', 'Microsoft Office Excel', 'Microsoft Macintosh Excel']
+
         file_type_details = magic.from_buffer(fileobj.read(READ_SIZE))
 
         fileobj.seek(0)
 
-        return any(string in file_type_details for string in word_strings)
+        if any(string in file_type_details for string in word_strings):
+            detected_type = 'application/msword'
+        elif any(string in file_type_details for string in excel_strings):
+            detected_type = 'application/vnd.ms-excel'
+        else:
+            detected_type = 'application/octet-stream'
+
+        return detected_type

@@ -22,7 +22,7 @@ class TestFileValidator(TestCase):
         self.assertTrue(isinstance(validator, FileTypeValidator))
 
     @data('sample.doc', 'sample.pdf', 'sample.docx', 'sample.pptx', 'sample.ppt',
-          'sample.tif', 'sample.jpeg', 'sample.png')
+          'sample.tif', 'sample.jpeg', 'sample.png', 'sample.xls', 'sample.xlsx')
     def test_valid_types(self, filename):
         """
         Tests that different files are detected correctly
@@ -32,6 +32,7 @@ class TestFileValidator(TestCase):
                 'application/msword',
                 'application/pdf',
                 'application/vnd.ms-powerpoint',
+                'application/vnd.ms-excel',
                 'image/tiff',
                 'image/jpeg',
                 'image/png'
