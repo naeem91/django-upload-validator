@@ -78,7 +78,7 @@ class FileTypeValidator(object):
         Returns proper mimetype in case of word or excel files
         """
         word_strings = ['Microsoft Word', 'Microsoft Office Word', 'Microsoft Macintosh Word']
-        excel_strings = ['Microsoft Excel', 'Microsoft Office Excel', 'Microsoft Macintosh Excel']
+        excel_strings = ['Microsoft Excel', 'Microsoft Office Excel', 'Microsoft Macintosh Excel', 'Microsoft OOXML']
 
         file_type_details = magic.from_buffer(fileobj.read(READ_SIZE))
 
