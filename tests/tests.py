@@ -30,9 +30,12 @@ class TestFileValidator(TestCase):
         validator = FileTypeValidator(
             allowed_types=[
                 'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
                 'application/pdf',
                 'application/vnd.ms-powerpoint',
+                'application/vnd.openxmlformats-officedocument.presentationml.presentation',
                 'application/vnd.ms-excel',
+                'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
                 'image/tiff',
                 'image/jpeg',
                 'image/png'
@@ -69,7 +72,10 @@ class TestFileValidator(TestCase):
         Checks case where file has valid type but extension is not allowed
         """
         validator = FileTypeValidator(
-            allowed_types=['application/msword'],
+            allowed_types=[
+                'application/msword',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+            ],
             allowed_extensions=['.doc', '.docx']
         )
 
