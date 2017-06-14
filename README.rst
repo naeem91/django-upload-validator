@@ -4,6 +4,15 @@ Django Upload Validator
 
 Django Upload Validator is a simple utility for validating file types and extensions using `python-magic` library.
 
+Installation
+############
+
+Install the `current PyPI release <https://pypi.python.org/pypi/django-upload-validator>`__:
+
+.. code:: bash
+
+    pip install django-upload-validator
+
 Usage
 #####
 General usage
