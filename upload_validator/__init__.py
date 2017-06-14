@@ -45,10 +45,10 @@ class FileTypeValidator(object):
         # later without resetting the position
         fileobj.seek(0)
 
-        # magic returns 'application/octet-stream' for .doc and .xls files
+        # some versions of libmagic do not report proper mimes for Office subtypes
         # use detection details to transform it to proper mime
-        if detected_type == 'application/octet-stream':
-            detected_type = self.check_word_or_excel(fileobj)
+        if detected_type in ('application/octet-stream', 'application/vnd.ms-office'):
+            detected_type = self.check_word_or_excel(fileobj, detected_type, extension)
 
         if detected_type not in self.allowed_mimes:
             # use more readable file type names for feedback message
@@ -73,12 +73,13 @@ class FileTypeValidator(object):
                 code='invalid_extension'
             )
 
-    def check_word_or_excel(self, fileobj):
+    def check_word_or_excel(self, fileobj, detected_type, extension):
         """
         Returns proper mimetype in case of word or excel files
         """
         word_strings = ['Microsoft Word', 'Microsoft Office Word', 'Microsoft Macintosh Word']
-        excel_strings = ['Microsoft Excel', 'Microsoft Office Excel', 'Microsoft Macintosh Excel', 'Microsoft OOXML']
+        excel_strings = ['Microsoft Excel', 'Microsoft Office Excel', 'Microsoft Macintosh Excel']
+        office_strings = ['Microsoft OOXML']
 
         file_type_details = magic.from_buffer(fileobj.read(READ_SIZE))
 
@@ -88,7 +89,11 @@ class FileTypeValidator(object):
             detected_type = 'application/msword'
         elif any(string in file_type_details for string in excel_strings):
             detected_type = 'application/vnd.ms-excel'
-        else:
-            detected_type = 'application/octet-stream'
+        elif any(string in file_type_details for string in office_strings) or \
+                (detected_type == 'application/vnd.ms-office'):
+            if extension in ('.doc', '.docx'):
+                detected_type = 'application/msword'
+            if extension in ('.xls', '.xlsx'):
+                detected_type = 'application/vnd.ms-excel'
 
         return detected_type
