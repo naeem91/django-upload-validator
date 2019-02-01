@@ -5,7 +5,7 @@ import os
 
 import magic
 
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext_lazy as _
 from django.utils.deconstruct import deconstructible
 from django.core.exceptions import ValidationError
 
