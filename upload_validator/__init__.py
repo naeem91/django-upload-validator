@@ -52,7 +52,7 @@ class FileTypeValidator(object):
 
         if detected_type not in self.allowed_mimes:
             # use more readable file type names for feedback message
-            allowed_types = map(lambda mime_type: mime_type.split('/')[1], self.allowed_mimes)
+            allowed_types = [mime_type.split('/')[1] for mime_type in self.allowed_mimes]
 
             raise ValidationError(
                 message=self.type_message,
