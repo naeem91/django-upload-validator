@@ -57,7 +57,7 @@ class TestFileValidator(TestCase):
 
         file_path = os.path.join(TEST_FILES_DIR, filename)
 
-        file_obj = open(file_path)
+        file_obj = open(file_path, mode='rb')
         validator(file_obj)
         file_obj.close()
 
@@ -72,7 +72,7 @@ class TestFileValidator(TestCase):
         file_with_wrong_content = os.path.join(TEST_FILES_DIR, 'wrong_jpg.jpeg')
 
         try:
-            validator(open(file_with_wrong_content))
+            validator(open(file_with_wrong_content, mode='rb'))
         except Exception as e:
             code = e.code
         else:
@@ -95,7 +95,7 @@ class TestFileValidator(TestCase):
         test_file = os.path.join(TEST_FILES_DIR, 'sample.docm')
 
         try:
-            validator(open(test_file))
+            validator(open(test_file, mode='rb'))
         except Exception as e:
             code = e.code
         else:
