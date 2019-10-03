@@ -8,3 +8,5 @@
 /*.egg-info
 /*.egg
 *.DS_Store
+
+.idea/
