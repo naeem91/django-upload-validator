@@ -33,8 +33,14 @@ class FileTypeValidator(object):
         "Allowed extensions are: '%(allowed_extensions)s'."
     )
 
+    invalid_message = _(
+        "Allowed type '%(allowed_type)s' is not a valid type. "
+        "See https://www.iana.org/assignments/media-types/media-types.xhtml"
+    )
+
     def __init__(self, allowed_types, allowed_extensions=()):
-        self.allowed_mimes = allowed_types
+        self.input_allowed_types = allowed_types
+        self.allowed_mimes = self._normalize(allowed_types)
         self.allowed_exts = allowed_extensions
 
     def __call__(self, fileobj):
@@ -48,17 +54,15 @@ class FileTypeValidator(object):
         # some versions of libmagic do not report proper mimes for Office subtypes
         # use detection details to transform it to proper mime
         if detected_type in ('application/octet-stream', 'application/vnd.ms-office'):
-            detected_type = self.check_word_or_excel(fileobj, detected_type, extension)
+            detected_type = self._check_word_or_excel(fileobj, detected_type, extension)
 
-        if detected_type not in self.allowed_mimes:
-            # use more readable file type names for feedback message
-            allowed_types = [mime_type.split('/')[1] for mime_type in self.allowed_mimes]
-
+        if detected_type not in self.allowed_mimes \
+                and detected_type.split('/')[0] not in self.allowed_mimes:
             raise ValidationError(
                 message=self.type_message,
                 params={
                     'detected_type': detected_type,
-                    'allowed_types': ', '.join(allowed_types)
+                    'allowed_types': ', '.join(self.input_allowed_types)
                 },
                 code='invalid_type'
             )
@@ -73,7 +77,31 @@ class FileTypeValidator(object):
                 code='invalid_extension'
             )
 
-    def check_word_or_excel(self, fileobj, detected_type, extension):
+    def _normalize(self, allowed_types):
+        """
+        Validate and transforms given allowed types
+        e.g; wildcard character specification will be normalized as text/* -> text
+        """
+        allowed_mimes = []
+        for allowed_type in allowed_types:
+            parts = allowed_type.split('/')
+            if len(parts) == 2:
+                if parts[1] == '*':
+                    allowed_mimes.append(parts[0])
+                else:
+                    allowed_mimes.append(allowed_type)
+            else:
+                raise ValidationError(
+                    message=self.invalid_message,
+                    params={
+                        'allowed_type': allowed_type
+                    },
+                    code='invalid_input'
+                )
+
+        return allowed_mimes
+
+    def _check_word_or_excel(self, fileobj, detected_type, extension):
         """
         Returns proper mimetype in case of word or excel files
         """

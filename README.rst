@@ -45,6 +45,15 @@ Usage as a FileField validator in Django forms
         )]
     )
 
+Wildcard character specification is also supported. e.g; for accepting only images:
+::
+    profile_image = forms.FileField(
+        label='', help_text="Only image formats are accepted.", required=False,
+        validators=[FileTypeValidator(
+            allowed_types=[ 'image/*']
+        )]
+    )
+
 
 Running Tests
 #############

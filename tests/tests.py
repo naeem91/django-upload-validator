@@ -102,3 +102,67 @@ class TestFileValidator(TestCase):
             code = None
 
         self.assertEqual(code, 'invalid_extension')
+
+    def test_invalid_type_specification(self):
+        """
+        Checks if provided mime type is correctly formatted
+        """
+        try:
+            FileTypeValidator(
+                allowed_types=['text'],
+            )
+        except Exception as e:
+            code = e.code
+        else:
+            code = None
+
+        self.assertEqual(code, 'invalid_input')
+
+    @data(*['sample.png', 'sample.jpeg', 'sample.tif'])
+    def test_wild_card_specification(self, filename):
+        """
+        Checks if wildcard character specifications work
+        """
+        validator = FileTypeValidator(
+            allowed_types=['image/*'],
+        )
+        test_file = os.path.join(TEST_FILES_DIR, filename)
+
+        fileobj = open(test_file, mode='rb')
+        validator(fileobj)
+        fileobj.close()
+
+    @data(*['sample.png', 'sample.jpeg', 'sample.pdf'])
+    def test_mixed_wild_card_specification(self, filename):
+        """
+        Checks if wildcard character specifications work
+        """
+        validator = FileTypeValidator(
+            allowed_types=['image/*', 'application/pdf'],
+        )
+        test_file = os.path.join(TEST_FILES_DIR, filename)
+
+        fileobj = open(test_file, mode='rb')
+        validator(fileobj)
+        fileobj.close()
+
+    @data(*['wrong_jpg.jpeg', 'sample.pdf'])
+    def test_wildcard_specification_invalid_content(self, filename):
+        """
+        Checks if wildcard character specifications work
+        """
+        validator = FileTypeValidator(
+            allowed_types=['image/*'],
+        )
+        test_file = os.path.join(TEST_FILES_DIR, filename)
+
+        fileobj = open(test_file, mode='rb')
+
+        try:
+            validator(fileobj)
+        except Exception as e:
+            code = e.code
+        else:
+            code = None
+
+        self.assertEqual(code, 'invalid_type')
