@@ -10,7 +10,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django-upload-validator',
-    version='1.1.3',
+    version='1.1.4',
     packages=['upload_validator'],
     description='A simple Django file type validator using python-magic',
     long_description=README,
