@@ -84,6 +84,7 @@ class FileTypeValidator(object):
         """
         allowed_mimes = []
         for allowed_type in allowed_types:
+            allowed_type = allowed_type.decode() if type(allowed_type) is bytes else allowed_type
             parts = allowed_type.split('/')
             if len(parts) == 2:
                 if parts[1] == '*':
