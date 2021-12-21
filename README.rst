@@ -1,8 +1,8 @@
 ***********************
 Django Upload Validator
 ***********************
-.. image:: https://circleci.com/gh/mckinseyacademy/django-upload-validator/tree/master.svg?style=svg
-    :target: https://circleci.com/gh/mckinseyacademy/django-upload-validator/tree/master
+.. image:: https://circleci.com/gh/naeem91/django-upload-validator/tree/master.svg?style=svg
+    :target: https://circleci.com/gh/naeem91/django-upload-validator/tree/master
 
 
 Django Upload Validator is a simple utility for validating file types and extensions using `python-magic` library.
