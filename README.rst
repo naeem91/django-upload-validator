@@ -19,7 +19,8 @@ Install the `current PyPI release <https://pypi.python.org/pypi/django-upload-va
 Usage
 #####
 General usage
-::
+
+.. code-block:: python
 
     from upload_validator import FileTypeValidator
 
@@ -34,7 +35,8 @@ General usage
     validator(file_resource)
 
 Usage as a FileField validator in Django forms
-::
+
+.. code-block:: python
 
     from upload_validator import FileTypeValidator
 
@@ -46,7 +48,8 @@ Usage as a FileField validator in Django forms
     )
 
 Wildcard character specification is also supported. e.g; for accepting only images:
-::
+
+.. code-block:: python
 
     profile_image = forms.FileField(
         label='', help_text="Only image formats are accepted.", required=False,
