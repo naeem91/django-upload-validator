@@ -55,7 +55,9 @@ class FileTypeValidator(object):
         # use detection details to transform it to proper mime
         if detected_type in ('application/octet-stream', 'application/vnd.ms-office'):
             detected_type = self._check_word_or_excel(fileobj, detected_type, extension)
-
+        
+        fileobj._detected_type = detected_type
+        
         if detected_type not in self.allowed_mimes \
                 and detected_type.split('/')[0] not in self.allowed_mimes:
             raise ValidationError(
